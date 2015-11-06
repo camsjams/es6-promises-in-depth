@@ -1,7 +1,7 @@
 # ES6 Presentation: Promises in depth
 [View presentation here](http://etalx.com/es6-promises-in-depth/)
 
-# Based on the [larger ES6 presentation](https://github.com/camsjams/es6-presentation)
+### Based on my [ES6 presentation covering more breadth](https://github.com/camsjams/es6-presentation)
 
 ## Install
 >       $ bower install
