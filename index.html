@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>ES6 Promises and You presentation</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h1>Promises and You</h1>
+
+            <h4>... fun with functional programming</h4>
+
+            <p>
+                <small>
+                    Created by <a href="https://github.com/camsjams">Cameron Manavian</a> / <a href="http://twitter.com/camsjams">@camsjams</a><br/>
+                </small>
+            </p>
+        </section>
+
+        <section>
+            <section>
+                <h2>Promises</h2>
+
+                <p>
+                    Promises are now a standard feature in JavaScript
+                </p>
+            </section>
+            <section>
+                <h2>Events vs Promises</h2>
+
+                <p>
+                    Events are best used for actions that can happen multiple times on the same element, such as:
+                </p>
+
+                <ul>
+                    <li>click</li>
+                    <li>touchstart</li>
+                    <li>submit</li>
+                    <li>etc.</li>
+                </ul>
+
+                <p>With these type of events you usually do not need to worry about the state before you attached the
+                    listener.</p>
+            </section>
+            <section>
+                <h2>Where promises help</h2>
+
+                <p>
+                    When it comes to asynchronous requests or operations, tracking all successes and failures can become cumbersome.
+                </p>
+            </section>
+            <section>
+                <img src="https://mdn.mozillademos.org/files/8633/promises.png"/>
+                <br />
+                source: <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a>
+            </section>
+            <section>
+                <h2>Example</h2>
+
+                <h4>The infamous pyramid of doom.</h4>
+
+                 <pre><code>
+         step1(function (value1) {
+             step2(value1, function(value2) {
+                 step3(value2, function(value3) {
+                     step4(value3, function(value4) {
+                        // Do something with value4
+                     });
+                 });
+             });
+         });
+                 </code></pre>
+                source: <a target="_blank" href="https://github.com/kriskowal/q">https://github.com/kriskowal/q</a>
+            </section>
+            <section>
+                <h2>Example</h2>
+
+                <h4>The more manageable tower of do awesome.</h4>
+                <pre><code>
+    var step1 = new Promise(...);
+
+    step1.then(step2)
+        .then(step3)
+        .then(step4)
+        .then(function (value4) {
+            // Do something with value4
+        })
+        .catch(function (error) {
+            // Handle any error from any above steps
+            throw new Error('fatal error in promises:' + error.message);
+        });
+                </code></pre>
+            </section>
+            <section>
+                <h2>Think of a promise as:</h2>
+
+                <p>
+                    Well ...<br /> a promise to eventually having a value at some indeterminable point in the future.
+                </p>
+
+                <small>It's kind of like a way of making multiple potentially long tasks operate within a synchronous set of
+                    instructions.
+                </small>
+            </section>
+            <section>
+                <h2>Promise Analogy: Part 1</h2>
+
+                <p>Every morning, Samwise asks Hodor to go out and collect food from the traps.</p>
+
+                <p class="fragment">Hodor promises Samwise that he will go out and collect the trappings.</p>
+
+                <small class="fragment">Hodor.</small>
+                <p class="fragment">Then Samwise decides that if:</p>
+                <ol>
+                   <li class="fragment">Hodor finds rabbit, they'll have rabbit stew with some potatoes.</li>
+                   <li class="fragment">Hodor finds pheasant, they'll eat roast pheasant.</li>
+                   <li class="fragment">Hodor finds no trappings, they'll eat Lembas bread.</li>
+                </ol>
+                <small class="fragment">The promise is now <span style="color: cornflowerblue">pending</span></small>
+            </section>
+            <section data-background="http://i.giphy.com/AxjfeKuEG4SK4.gif">
+            </section>
+            <section>
+                <h2>Promise Analogy: Part 2</h2>
+
+                <p>Soon Hodor returns.</p>
+
+                <p class="fragment">Different outcomes may have occurred.</p>
+
+                <ol>
+                    <li class="fragment">
+                        Promise <span style="color: darkseagreen">fulfilled</span>: Hodor kept his promise and went to the trap, and found rabbit. Rabbit stew it is!
+                    </li>
+                    <li class="fragment">
+                        Promise <span style="color: darkseagreen">fulfilled</span>: Hodor kept his promise and went to the trap, and found pheasant. Time to roast!
+                    </li>
+                    <li class="fragment">
+                        Promise <span style="color: darkseagreen">fulfilled</span>: Hodor kept his promise and went to the trap, and found nothing. Time to eat bread!
+                    </li>
+                    <li class="fragment">
+                        Promise <span style="color: indianred">rejected</span>: Hodor went out to collect the traps but saw White Walkers and Nazgûl - it was too dangerous to venture out. Time to eat bread!
+                    </li>
+                    <li class="fragment">
+                        Promise <span style="color: indianred">rejected</span>: Hodor. Time to eat bread!
+                    </li>
+                </ol>
+            </section>
+            <section data-background="http://i.giphy.com/77IsrFANBT0RO.gif">
+            </section>
+        </section>
+
+        <section style="text-align: left;">
+            <h1>THE END</h1>
+
+            <p>
+                - <a href="https://github.com/camsjams/es6-promises-in-depth">Source</a>
+            </p>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+<script src="bower_components/reveal.js/js/reveal.js"></script>
+
+<script>
+
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: 'bower_components/reveal.js/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, condition: function () {
+                return !!document.querySelector('pre code');
+            }, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            {src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true},
+            {src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true}
+        ]
+    });
+
+</script>
+
+</body>
+</html>
