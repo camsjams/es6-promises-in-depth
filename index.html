@@ -57,37 +57,143 @@
                 <h2>Promises</h2>
 
                 <p>
-                    Promises are now a standard feature in JavaScript
+                    Promises are now a "standard" feature in JavaScript
                 </p>
+                <ul>
+                    <li>
+                        Node 0.12.7+, 4.0.0+
+                    </li>
+                    <li>Microsoft Edge</li>
+                    <li>Chrome 32+</li>
+                    <li>Firefox 29+</li>
+                    <li>Safari 7.1+</li>
+                </ul>
             </section>
+        </section>
+        <section>
             <section>
-                <h2>Events vs Promises</h2>
+                <h2>Event Listeners</h2>
 
                 <p>
-                    Events are best used for actions that can happen multiple times on the same element, such as:
+                    Events Listeners are best used for actions that can happen multiple times on the same element, such as:
                 </p>
 
                 <ul>
                     <li>click</li>
                     <li>touchstart</li>
                     <li>submit</li>
+                    <li>on [data,close,...]</li>
                     <li>etc.</li>
                 </ul>
 
                 <p>With these type of events you usually do not need to worry about the state before you attached the
-                    listener.</p>
+                    listener. Events may never trigger.</p>
             </section>
             <section>
-                <h2>Where promises help</h2>
+                <h2>Callbacks</h2>
+                <p>
+                    Callbacks are the most common argument for event listeners or asynchronous functions.<br />
+                    <small>The functions take some input and a callback that's invoked with some kind of output.</small>
+                </p>
+                <pre><code>
+            function getUsernameWithId(id, cb) {
+                var username = '';
+                var error = null;
+                ...
+                cb(error, username);
+            }
+                </code></pre>
+
+                <pre><code>
+            getUsernameWithId(someId, function (err, value) {
+                // in callback, we have a error and value from function
+            });
+                </code></pre>
+            </section>
+            <section>
+                <h2>Promises</h2>
+
+                <p>
+                    By removing the imperative nature of a callback, we can proxy the value needed for later use.
+                </p>
+
+                <pre><code>
+                function getUsernameWithId(id) {
+                    return new Promise(function (resolve, reject) {
+                        var username = '';
+                        ...
+                        if(username)
+                            resolve(username);
+                        else
+                            reject('user not found!');
+                    });
+                }
+                </code></pre>
+            </section>
+            <section>
+                <h3>Promise me this</h3>
+                <pre><code>
+        getUsernameWithId(someId)
+            .then(function (value) {
+                // we receive value here
+            })
+            .catch(function (error) {
+                // Handle any error thrown, handle rejections
+            });
+                </code></pre>
+
+                <p>The most notable improvement of using a promise instead of just callbacks is that you have an instance of an object that represents deferred work.</p>
+                  <pre><code>
+              var usernamePromise = getUsernameWithId(someId);
+                  </code></pre>
+            </section>
+            <section>
+                <h2>Promises vs Callbacks</h2>
+                <p>Seemingly the same, but conceptually different</p>
+                <ul>
+                    <li>
+                        Promises are:
+                        <ul>
+                            <li>functional programming</li>
+                            <li>a form of declarative programming</li>
+                            <li>concerned with the <strong>WHAT</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        Callbacks are:
+                        <ul>
+                            <li>procedural programming</li>
+                            <li>a form of imperative programming</li>
+                            <li>concerned with the <strong>HOW</strong></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <p>If I write my little library, and it goes and talks to Redis, and that’s the last thing it ever does,
+                    I can just pass the callback that was
+                    handed to me off to Redis. And when we do hit these problems like callback hell, I’ll tell you a
+                    secret: there’s also a coroutine hell and a
+                    monad hell and a hell for any abstraction you create if you use it enough.
+
+                <p>
+
+                <p>For the 90% case we have this super super simple interface, so when you need to do one thing, you
+                    just get one little indent and then you’re done.
+                    And when you have a complicated use case you go and install async like the other 827 modules that
+                    depend on it in npm.
+                </p>
+
+                <small>Mikeal Rogers, LXJS 2012</small>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>We are promises, and we're here to help</h2>
 
                 <p>
                     When it comes to asynchronous requests or operations, tracking all successes and failures can become cumbersome.
                 </p>
-            </section>
-            <section>
-                <img src="https://mdn.mozillademos.org/files/8633/promises.png"/>
-                <br />
-                source: <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a>
             </section>
             <section>
                 <h2>Example</h2>
@@ -95,15 +201,15 @@
                 <h4>The infamous pyramid of doom.</h4>
 
                  <pre><code>
-         step1(function (value1) {
-             step2(value1, function(value2) {
-                 step3(value2, function(value3) {
-                     step4(value3, function(value4) {
-                        // Do something with value4
+             step1(function (value1) {
+                 step2(value1, function(value2) {
+                     step3(value2, function(value3) {
+                         step4(value3, function(value4) {
+                            // Do something with value4
+                         });
                      });
                  });
              });
-         });
                  </code></pre>
                 source: <a target="_blank" href="https://github.com/kriskowal/q">https://github.com/kriskowal/q</a>
             </section>
@@ -133,10 +239,12 @@
                     Well ...<br /> a promise to eventually having a value at some indeterminable point in the future.
                 </p>
 
-                <small>It's kind of like a way of making multiple potentially long tasks operate within a synchronous set of
+                <small>It can be used for making multiple potentially long tasks operate within a synchronous set of
                     instructions.
                 </small>
             </section>
+        </section>
+        <section>
             <section>
                 <h2>Promise Analogy: Part 1</h2>
 
@@ -147,9 +255,9 @@
                 <small class="fragment">Hodor.</small>
                 <p class="fragment">Then Samwise decides that if:</p>
                 <ol>
-                   <li class="fragment">Hodor finds rabbit, they'll have rabbit stew with some potatoes.</li>
-                   <li class="fragment">Hodor finds pheasant, they'll eat roast pheasant.</li>
-                   <li class="fragment">Hodor finds no trappings, they'll eat Lembas bread.</li>
+                    <li class="fragment">Hodor finds rabbit, they'll have rabbit stew with some potatoes.</li>
+                    <li class="fragment">Hodor finds pheasant, they'll eat roast pheasant.</li>
+                    <li class="fragment">Hodor finds no trappings, they'll eat Lembas bread.</li>
                 </ol>
                 <small class="fragment">The promise is now <span style="color: cornflowerblue">pending</span></small>
             </section>
