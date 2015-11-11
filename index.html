@@ -72,123 +72,6 @@
         </section>
         <section>
             <section>
-                <h2>Event Listeners</h2>
-
-                <p>
-                    Events Listeners are best used for actions that can happen multiple times on the same element, such as:
-                </p>
-
-                <ul>
-                    <li>click</li>
-                    <li>touchstart</li>
-                    <li>submit</li>
-                    <li>on [data,close,...]</li>
-                    <li>etc.</li>
-                </ul>
-
-                <p>With these type of events you usually do not need to worry about the state before you attached the
-                    listener. Events may never trigger.</p>
-            </section>
-            <section>
-                <h2>Callbacks</h2>
-                <p>
-                    Callbacks are the most common argument for event listeners or asynchronous functions.<br />
-                    <small>The functions take some input and a callback that's invoked with some kind of output.</small>
-                </p>
-                <pre><code>
-            function getUsernameWithId(id, cb) {
-                var username = '';
-                var error = null;
-                ...
-                cb(error, username);
-            }
-                </code></pre>
-
-                <pre><code>
-            getUsernameWithId(someId, function (err, value) {
-                // in callback, we have a error and value from function
-            });
-                </code></pre>
-            </section>
-            <section>
-                <h2>Promises</h2>
-
-                <p>
-                    By removing the imperative nature of a callback, we can proxy the value needed for later use.
-                </p>
-
-                <pre><code>
-                function getUsernameWithId(id) {
-                    return new Promise(function (resolve, reject) {
-                        var username = '';
-                        ...
-                        if(username)
-                            resolve(username);
-                        else
-                            reject('user not found!');
-                    });
-                }
-                </code></pre>
-            </section>
-            <section>
-                <h3>Promise me this</h3>
-                <pre><code>
-        getUsernameWithId(someId)
-            .then(function (value) {
-                // we receive value here
-            })
-            .catch(function (error) {
-                // Handle any error thrown, handle rejections
-            });
-                </code></pre>
-
-                <p>The most notable improvement of using a promise instead of just callbacks is that you have an instance of an object that represents deferred work.</p>
-                  <pre><code>
-              var usernamePromise = getUsernameWithId(someId);
-                  </code></pre>
-            </section>
-            <section>
-                <h2>Promises vs Callbacks</h2>
-                <p>Seemingly the same, but conceptually different</p>
-                <ul>
-                    <li>
-                        Promises are:
-                        <ul>
-                            <li>functional programming</li>
-                            <li>a form of declarative programming</li>
-                            <li>concerned with the <strong>WHAT</strong></li>
-                        </ul>
-                    </li>
-                    <li>
-                        Callbacks are:
-                        <ul>
-                            <li>procedural programming</li>
-                            <li>a form of imperative programming</li>
-                            <li>concerned with the <strong>HOW</strong></li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <p>If I write my little library, and it goes and talks to Redis, and that’s the last thing it ever does,
-                    I can just pass the callback that was
-                    handed to me off to Redis. And when we do hit these problems like callback hell, I’ll tell you a
-                    secret: there’s also a coroutine hell and a
-                    monad hell and a hell for any abstraction you create if you use it enough.
-
-                <p>
-
-                <p>For the 90% case we have this super super simple interface, so when you need to do one thing, you
-                    just get one little indent and then you’re done.
-                    And when you have a complicated use case you go and install async like the other 827 modules that
-                    depend on it in npm.
-                </p>
-
-                <small>Mikeal Rogers, LXJS 2012</small>
-            </section>
-        </section>
-        <section>
-            <section>
                 <h2>We are promises, and we're here to help</h2>
 
                 <p>
@@ -233,6 +116,51 @@
                 </code></pre>
             </section>
             <section>
+                <h2>Callbacks</h2>
+                <p>
+                    Callbacks are the most common argument for event listeners or asynchronous functions.<br />
+                </p>
+                <pre><code>
+        userModel.getUserEmail(userId, function (err, email) {
+            // in callback, we have a error and value from function
+            if (err)
+                // handle error
+            // do something with value
+            mail.sendEmail(email, function(err, res) {
+                if (err)
+                // handle error
+            });
+        });
+                </code></pre>
+                <p>
+                    <small>These style of functions takes some input and a callback to be invoked with some kind of output or error.</small>
+                </p>
+            </section>
+            <section>
+                <h2>Promises</h2>
+
+                <p>
+                    By extracting some of the nested callbacks out, we can simplify the code and proxy the value needed for later use.
+                </p>
+                <pre><code>
+        getUserEmail(userId)
+            .then(mail.sendEmail)
+            .catch(function (error) {
+                // Handle any error thrown, handle rejections
+            });
+                </code></pre>
+
+                <p>The most notable improvement of using a promise instead of just callbacks is that you have an instance of an object that represents deferred work.</p>
+                  <pre><code>
+              var emailPromise = getUserEmail(userId);
+              // code section one
+              emailPromise.then(sendEmail);
+              ...
+              // later code
+              emailPromise.then(trackAnalytics);
+                  </code></pre>
+            </section>
+            <section>
                 <h2>Think of a promise as:</h2>
 
                 <p>
@@ -240,7 +168,7 @@
                 </p>
 
                 <small>It can be used for making multiple potentially long tasks operate within a synchronous set of
-                    instructions.
+                    instructions. <br /><small>@see Promise.all and Promise.race</small>
                 </small>
             </section>
         </section>
