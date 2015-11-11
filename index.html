@@ -43,7 +43,7 @@
         <section>
             <h1>Promises and You</h1>
 
-            <h4>... fun with functional programming</h4>
+            <h4 class="fragment">... how can you proxy all the things?</h4>
 
             <p>
                 <small>
@@ -60,13 +60,13 @@
                     Promises are now a "standard" feature in JavaScript
                 </p>
                 <ul>
-                    <li>
+                    <li class="fragment">
                         Node 0.12.7+, 4.0.0+
                     </li>
-                    <li>Microsoft Edge</li>
-                    <li>Chrome 32+</li>
-                    <li>Firefox 29+</li>
-                    <li>Safari 7.1+</li>
+                    <li class="fragment">Microsoft Edge</li>
+                    <li class="fragment">Chrome 32+</li>
+                    <li class="fragment">Firefox 29+</li>
+                    <li class="fragment">Safari 7.1+</li>
                 </ul>
             </section>
         </section>
@@ -120,7 +120,7 @@
                 <p>
                     Callbacks are the most common argument for event listeners or asynchronous functions.<br />
                 </p>
-                <pre><code>
+                <pre class="fragment"><code>
         userModel.getUserEmail(userId, function (err, email) {
             // in callback, we have a error and value from function
             if (err)
@@ -132,7 +132,7 @@
             });
         });
                 </code></pre>
-                <p>
+                <p class="fragment">
                     <small>These style of functions takes some input and a callback to be invoked with some kind of output or error.</small>
                 </p>
             </section>
@@ -142,16 +142,18 @@
                 <p>
                     By extracting some of the nested callbacks out, we can simplify the code and proxy the value needed for later use.
                 </p>
-                <pre><code>
+                <pre class="fragment"><code>
         getUserEmail(userId)
             .then(mail.sendEmail)
             .catch(function (error) {
                 // Handle any error thrown, handle rejections
             });
                 </code></pre>
+            </section>
+            <section>
 
-                <p>The most notable improvement of using a promise instead of just callbacks is that you have an instance of an object that represents deferred work.</p>
-                  <pre><code>
+                <p>The most notable improvement of using promises instead of nested callbacks is that you have an instance of an object that represents deferred work.</p>
+                  <pre class="fragment"><code>
               var emailPromise = getUserEmail(userId);
               // code section one
               emailPromise.then(sendEmail);
@@ -163,13 +165,20 @@
             <section>
                 <h2>Think of a promise as:</h2>
 
-                <p>
-                    Well ...<br /> a promise to eventually having a value at some indeterminable point in the future.
+                <p class="fragment">Well ...</p>
+                <p class="fragment">
+                    A promise to eventually having a value at some indeterminable point in the future.
                 </p>
 
-                <small>It can be used for making multiple potentially long tasks operate within a synchronous set of
-                    instructions. <br /><small>@see Promise.all and Promise.race</small>
+                <small class="fragment">They can be used for making multiple potentially long tasks operate within a synchronous set of
+                    instructions.
+                    <br /><small class="fragment">@see Promise.all and Promise.race</small>
                 </small>
+            </section>
+            <section>
+                <h2>Promises!</h2>
+                <img src="https://media.giphy.com/media/11nC0Nw67P2ZSU/giphy.gif" />
+                <h5>Wait what?</h5>
             </section>
         </section>
         <section>
